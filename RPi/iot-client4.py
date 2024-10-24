@@ -3,7 +3,6 @@ import serial
 import json
 import time
 
-# Setup GPIO for fan control (assumed controlled by Teensy, so no direct GPIO control here)
 # Setup Bluetooth serial connection to Teensy (Serial1 on Teensy)
 bluetoothSerial = serial.Serial("/dev/rfcomm0", baudrate=9600, timeout=1)
 
