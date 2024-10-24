@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fan Control Interface</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+
+        button {
+            font-size: 18px;
+            padding: 10px 20px;
+            margin: 20px;
+            cursor: pointer;
+        }
+
+        #status {
+            margin-top: 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Remote Fan Control</h1>
+    <button onclick="sendCommand('ON')">Turn Fan ON</button>
+    <button onclick="sendCommand('OFF')">Turn Fan OFF</button>
+    <p id="status">Status: Waiting for command...</p>
+
+    <script>
+        function sendCommand(fanStatus) {
+            // Update the status message on the page
+            document.getElementById('status').textContent = "Sending " + fanStatus + " command...";
+
+            // Send the command to the Flask app on the EC2 instance
+            fetch('http://3.27.198.196/fan-control', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ fan_status: fanStatus })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('status').textContent = "Fan status: " + data.message;
+                })
+                .catch(error => {
+                    document.getElementById('status').textContent = "Error sending command.";
+                });
+        }
+    </script>
+</body>
+
+</html>
